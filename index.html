@@ -78,7 +78,16 @@
           const postElement = document.createElement('div');
           postElement.classList.add('post');
 
-          const imgSrc = post.thumbnail;
+          // Attempt to get image from the post content if thumbnail is missing
+          let imgSrc = post.thumbnail;
+          if (!imgSrc) {
+            const imgMatch = post.content.match(/<img.*?src="(.*?)"/);  // Regex to find the first image URL
+            if (imgMatch && imgMatch[1]) {
+              imgSrc = imgMatch[1];
+            } else {
+              imgSrc = 'https://via.placeholder.com/800x200?text=No+Image';  // Placeholder if no image found
+            }
+          }
 
           postElement.innerHTML = `
             <a href="${post.link}" target="_blank">
